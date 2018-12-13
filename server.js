@@ -31,7 +31,7 @@ function setTimers( sessionId ){
     let sysDate = moment(new Date()).valueOf();
     let session = sessionsData[sessionId];
     let meetingTime = moment(session.meetingStartDateTime).valueOf()
-    let meetingTimePlusFifteen = moment(session.meetingStartDateTime).add(15, 'minutes').add(1,'seconds').valueOf()
+    let meetingTimePlusFifteen = moment(session.meetingStartDateTime).add(5, 'minutes').add(1,'seconds').valueOf()
     console.log(meetingTime)
     console.log(meetingTimePlusFifteen)
 
