@@ -42,16 +42,14 @@ function setTimers( sessionId ){
         var beforeFifteenInterval = setInterval(()=>{
             console.log("Interval log")
             let date = new Date()
-            let currentTime = new Date(date.getTime()-(date.getTimezoneOffset()*60000)).getTime();
-            sessionsData[sessionId].totalVotes += sessionsData[sessionId].maxVoterCount;
-            sessionsData[sessionId].totalScore += sessionsData[sessionId].maxVoterCount * 5;
-            let weightedAverage=sessionsData[sessionId].totalScore/sessionsData[sessionId].totalVotes;
-            sessionsData[sessionId].data.push([currentTime,weightedAverage]);
-            console.log('data is ' + sessionsData[sessionId].data)
-            console.log("emitting on : " + 'showResults'+sessionId)
+            let currentTime =  moment(new Date()).add(8,"hours").valueOf();
+            // console.log("sys time in secs" + currentTime)
+            sessionsData[sessionId].data.push([currentTime,5]);
+            // console.log('data is ' + sessionsData[sessionId].data)
+            console.log("Interval emitting on : " + 'showResults'+sessionId)
             
            
-        },300000);
+        },5000);
         setTimeout(() => {
             console.log("3 Minutes after Meeting [" + sessionId + "] started")
             clearInterval(beforeFifteenInterval)
@@ -64,7 +62,7 @@ function setTimers( sessionId ){
                 sessionsData[sessionId].canVote = false;}
             else{
                 let date = new Date()
-                let currentTime = new Date(date.getTime()-(date.getTimezoneOffset()*60000)).getTime();
+                let currentTime = moment(new Date()).add(8,"hours").valueOf();
                 let session = sessionsData[sessionId];
                 let outstandingVotes = session.maxVoterCount - session.intervalVotes
                 sessionsData[sessionId].totalVotes += outstandingVotes;
@@ -72,6 +70,8 @@ function setTimers( sessionId ){
                 let weightedAverage=sessionsData[sessionId].totalScore/sessionsData[sessionId].totalVotes;
                 sessionsData[sessionId].data.push([currentTime,weightedAverage]);
                 sessionsData[sessionId].intervalVotes = 0;
+                sessionsData[sessionId].totalVotes = 0;
+                sessionsData[sessionId].totalScore = 0;
             }
             },300000)
 
@@ -161,24 +161,24 @@ io.on('connection', function (socket) {
     console.log('New Socket Connection Created');
 
     socket.on('vote/', function(payload){
-        console.log("Inside vote")
+        console.log("New Vote recieved")
         let sessionId = payload.sessionId
         let score = payload.score
         let session = sessionsData[sessionId]
         let sysDate=moment(new Date()).valueOf() 
-        console.log(session.meetingEndDateTime)
-        console.log(sysDate)
+        // console.log(session.meetingEndDateTime)
+        // console.log(sysDate)
         if(session.meetingEndDateTime>=sysDate){
 
             session.totalScore=session.totalScore+parseInt(score);
             session.totalVotes+=1;
             session.intervalVotes+=1
             var date=new Date()
-            var currentTime=new Date(date.getTime()-(date.getTimezoneOffset()*60000)).getTime();
+            var currentTime=  moment(new Date()).add(8,"hours").valueOf();
             var weightedAverage=session.totalScore/session.totalVotes;
             session.data.push([currentTime,weightedAverage]);
             console.log('Someone voted on sessionId: '+sessionId+ ' Score->'+ score);
-            console.log('Total Score for sessionId: '+sessionId+" is "+session.totalScore);
+            // console.log('Total Score for sessionId: '+sessionId+" is "+session.totalScore);
             io.emit('showResults/'+sessionId, session.data);
 
         }

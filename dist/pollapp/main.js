@@ -41,7 +41,7 @@ module.exports = "@import url('https://fonts.googleapis.com/css?family=Roboto');
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div style=\"margin-top: 25px;\">\r\n  <div class=\"col-xs-3\" style=\" padding-left: 15px;\" >\r\n    <!-- <img src=\"./assets/clsalogo.jpg\" style=\"max-width: 100px\" /> -->\r\n  </div>\r\n \r\n\r\n \r\n</div>\r\n<div class=\"container\">\r\n  <div class=\"wrapper\">\r\n    <h2>Interest-O-Meter</h2>\r\n    <nav class=\"tabs\">\r\n      <div class=\"selector\"></div>\r\n      <a [routerLinkActive]=\"['active']\"  routerLink=\"{{chartlink}}\"><i class=\"fa fa-line-chart\"></i>Results</a>\r\n      <a [routerLinkActive]=\"['active']\"  routerLink=\"{{pollink}}\"><i class=\"fa fa-star\"></i>Vote</a>\r\n    </nav>\r\n    <!-- <div class=\"timer\">\r\n        <app-timer [time]=\"'00:59:54'\" [label]=\"'Some data'\"></app-timer>\r\n    </div> -->\r\n  </div>\r\n  <div class=\"container\">\r\n      <router-outlet></router-outlet>\r\n     \r\n    </div>\r\n</div>\r\n<div class=\"footer\">\r\n  <div class=\"copyright\">All Rights Reserved.</div>\r\n  </div>"
+module.exports = "<div style=\"margin-top: 25px;\">\r\n  <div class=\"col-xs-3\" style=\" padding-left: 15px;\" >\r\n    <!-- <img src=\"./assets/clsalogo.jpg\" style=\"max-width: 100px\" /> -->\r\n  </div>\r\n \r\n\r\n \r\n</div>\r\n<div class=\"container\">\r\n  <div class=\"wrapper\">\r\n    <h2>Interest-O-Meter</h2>\r\n    <nav class=\"tabs\">\r\n      <div class=\"selector\"></div>\r\n      <a [routerLinkActive]=\"['active']\"  routerLink=\"{{chartlink}}\"><i class=\"fa fa-line-chart\"></i>Interest</a>\r\n      <a [routerLinkActive]=\"['active']\"  routerLink=\"{{pollink}}\"><i class=\"fa fa-star\"></i>Vote</a>\r\n    </nav>\r\n    <!-- <div class=\"timer\">\r\n        <app-timer [time]=\"'00:59:54'\" [label]=\"'Some data'\"></app-timer>\r\n    </div> -->\r\n  </div>\r\n  <div class=\"container\">\r\n      <router-outlet></router-outlet>\r\n     \r\n    </div>\r\n</div>\r\n<div class=\"footer\">\r\n  <div class=\"copyright\">All Rights Reserved.</div>\r\n  </div>"
 
 /***/ }),
 
@@ -241,6 +241,9 @@ var ChartScreenComponent = /** @class */ (function () {
         this.sessionService = sessionService;
         this.Highcharts = highcharts_highstock__WEBPACK_IMPORTED_MODULE_2__;
         this.chartOptions = {
+            global: {
+                useUTC: false
+            },
             colors: ['#90ee7e', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066',
                 '#eeaaee', '#55BF3B', '#DF5353', '#7798BF', '#aaeeee'],
             chart: {
@@ -316,6 +319,8 @@ var ChartScreenComponent = /** @class */ (function () {
                 dateTimeLabelFormats: { minute: '%H:%M', }
             },
             yAxis: {
+                max: 10,
+                min: 0,
                 gridLineColor: '#707073',
                 labels: {
                     style: {
@@ -372,6 +377,7 @@ var ChartScreenComponent = /** @class */ (function () {
                 }
             },
             series: [{
+                    showInLegend: false,
                     name: 'Rating',
                     // data: [
                     //   3.7, 3.3, 3.9, 5.1, 3.5, 3.8, 4.0, 5.0, 6.1, 3.7, 3.3, 6.4
